@@ -13,25 +13,15 @@ defmodule RotationalCipher do
 
   # defp info(msg), do: IO.puts "\n[[ #{msg} ]] \n"
 
-  defp rotate_char(chr, shift) do
-    cond do
-      chr in ?a..?z ->
-        # info "lowercase: #{chr}"
-        rotate_char_base(chr, shift, ?a)
-      chr in ?A..?Z ->
-        # info "uppercase #{chr}"
-        rotate_char_base(chr, shift, ?A)
-      true ->
-        # info "other: #{chr}"
-        chr
-    end
-  end
+  defp rotate_char(chr, shift) when chr in ?a..?z, do: rotate_char_base(chr, shift, ?a)
+  defp rotate_char(chr, shift) when chr in ?A..?Z, do: rotate_char_base(chr, shift, ?A)
+  defp rotate_char(chr, shift), do: chr
 
   defp rotate_char_base(chr, shift, base) do
     offset = chr - base
     shifted = rem(offset + shift, 1+?z-?a)
     result = base + shifted
-    # info "chr=#{chr}, shift=#{shift}, base=#{base}, offset=#{offset}, shifted=#{shifted}, result=#{result}"
+    IO.inspect(binding())
     result
   end
 end
