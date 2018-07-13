@@ -4,25 +4,25 @@ defmodule ProteinTranslation do
   """
   @spec of_rna(String.t()) :: {atom, list(String.t())}
   def of_rna(rna) do
-    codons = for codon_chars <- Enum.chunk_every(String.to_charlist(rna), 3), do: List.to_string(codon_chars)
-    case of_rna(codons, []) do
-      {:error, message} -> {:error, message}
-      proteins when is_list(proteins) -> {:ok, Enum.reverse(proteins)}
-      _ -> raise "huh"
-    end
-  end
+    codons =
+      for codon_chars <- Enum.chunk_every(String.to_charlist(rna), 3),
+          do: List.to_string(codon_chars)
 
-  @spec of_rna([String.t()], [String.t()]) :: {:error, String.t()} | [String.t()]
-  defp of_rna([codon | codons], proteins) do
-    case of_codon(codon) do
-      {:ok, "STOP"} -> proteins
-      {:ok, protein} -> of_rna(codons, [protein|proteins])
-      {:error, _message} -> {:error, "invalid RNA"}
-    end
-  end
+    # convert RNA to proteins, adding to a list, until a STOP codon or invalid codon is found
+    result =
+      codons
+      |> Enum.reduce_while([], fn codon, proteins ->
+        case of_codon(codon) do
+          {:ok, "STOP"} -> {:halt, proteins}
+          {:ok, protein} -> {:cont, [protein | proteins]}
+          {:error, _message} -> {:halt, {:error, "invalid RNA"}}
+        end
+      end)
 
-  defp of_rna([], proteins) do
-    proteins
+    case result do
+      {:error, _} -> result
+      result when is_list(result) -> {:ok, Enum.reverse(result)}
+    end
   end
 
   @doc """

@@ -11,17 +11,17 @@ defmodule RotationalCipher do
     to_string(for << chr <- text >>, do: rotate_char(chr, shift))
   end
 
-  # defp info(msg), do: IO.puts "\n[[ #{msg} ]] \n"
-
+  # Return the character shifted by the given amount of characters if it's a
+  # letter; otherwise return or the character itself.
   defp rotate_char(chr, shift) when chr in ?a..?z, do: rotate_char_base(chr, shift, ?a)
   defp rotate_char(chr, shift) when chr in ?A..?Z, do: rotate_char_base(chr, shift, ?A)
   defp rotate_char(chr, shift), do: chr
 
+  # Return the character shifted by the given amount of characters with respect
+  # to the given base character - the character at position zero in the alphabet
   defp rotate_char_base(chr, shift, base) do
     offset = chr - base
     shifted = rem(offset + shift, 1+?z-?a)
-    result = base + shifted
-    IO.inspect(binding())
-    result
+    base + shifted
   end
 end

@@ -71,12 +71,9 @@ defmodule PigLatin do
 
   # If `strings` starts with any of the given parts, return the part that
   # matches. Otherwise return nil.
-  def starts_with_any(string, [part|parts]) do
-    if (String.starts_with?(string, part)) do
-      part
-    else
-      starts_with_any(string, parts)
-    end
+  def starts_with_any(string, parts) do
+    parts |> Enum.map(&(String.starts_with?(string, &1))) |> Enum.any?()
+  ))
   end
 
   def starts_with_any(_, []) do
