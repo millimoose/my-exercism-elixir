@@ -7,7 +7,11 @@ defmodule Strain do
   """
   @spec keep(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def keep(list, fun) do
-    list |> List.foldl([], fn it, acc -> if fun.(it), do: [it | acc], else: acc end)
+    list
+    |> Enum.reduce([], fn it, acc ->
+      if fun.(it), do: [it | acc], else: acc
+    end)
+    |> Enum.reverse()
   end
 
   @doc """
@@ -18,6 +22,10 @@ defmodule Strain do
   """
   @spec discard(list :: list(any), fun :: (any -> boolean)) :: list(any)
   def discard(list, fun) do
-    list |> List.foldl([], fn it, acc -> if fun.(it), do: acc, else: [it | acc] end)
+    list
+    |> Enum.reduce([], fn it, acc ->
+      if fun.(it), do: acc, else: [it | acc]
+    end)
+    |> Enum.reverse()
   end
 end
