@@ -40,8 +40,8 @@ defmodule PigLatin do
   def split_word(prefix, ""), do: prefix
   def split_word(prefix, suffix) do
     cond do
-      starts_with_any(suffix, @vowels) -> {prefix, suffix}
-      starts_with_any(suffix, ~W(x y)) ->
+      starts_with_any?(suffix, @vowels) -> {prefix, suffix}
+      starts_with_any?(suffix, ~W(x y)) ->
         # look ahead at second letter in suffix
         if String.at(suffix, 1) not in @vowels do
           {prefix, suffix}
@@ -71,12 +71,13 @@ defmodule PigLatin do
 
   # If `strings` starts with any of the given parts, return the part that
   # matches. Otherwise return nil.
-  def starts_with_any(string, parts) do
-    parts |> Enum.map(&(String.starts_with?(string, &1))) |> Enum.any?()
-  ))
-  end
-
-  def starts_with_any(_, []) do
+  def starts_with_any?(_, []) do
     nil
   end
+
+  def starts_with_any?(string, parts) do
+    parts |> Enum.map(&(String.starts_with?(string, &1))) |> Enum.any?()
+  end
+
+
 end
