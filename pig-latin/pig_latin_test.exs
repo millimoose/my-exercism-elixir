@@ -146,13 +146,13 @@ defmodule PigLatinTest do
 
   describe "starts_with_any" do
     test "finds a match if word starts with first part" do
-      assert PigLatin.starts_with_any("aaa", ~W(a b c)) != nil
+      assert PigLatin.starts_with_any?("aaa", ~W(a b c))
     end
     test "finds a match if word starts with last part" do
-      assert PigLatin.starts_with_any("ccc", ~W(a b c)) != nil
+      assert PigLatin.starts_with_any?("ccc", ~W(a b c))
     end
     test "doesn't find a match" do
-      assert PigLatin.starts_with_any("abc", ~W(d e f)) == nil
+      assert not PigLatin.starts_with_any?("abc", ~W(d e f))
     end
   end
 end
